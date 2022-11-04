@@ -1,0 +1,33 @@
+name: 'Merge: Publish Docs'
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_publish:
+    name: Build and publish docs
+    runs-on: ubuntu-20.04
+
+    permissions:
+      id-token: write
+      contents: write
+      pages: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Create github pages artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: pages
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
